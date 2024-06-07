@@ -1,0 +1,23 @@
+{
+"id": "DATANODE_initial_data_0f43075d-80d9-4dac-b25f-855653052e0d",
+"config_id": "initial_data",
+"scope": "<Scope.GLOBAL: 3>",
+"storage_type": "csv",
+"owner_id": null,
+"parent_ids": [],
+"last_edit_date": "2024-06-07T15:20:40.607565",
+"edits": [],
+"version": "d0cb7b70-0563-4af9-a1f4-0cac314c4d1a",
+"validity_days": null,
+"validity_seconds": null,
+"edit_in_progress": false,
+"editor_id": null,
+"editor_expiration_date": null,
+"data_node_properties": {
+"path": "data/modified_supermarkt_sales_plus.csv",
+"encoding": "utf-8",
+"has_header": true,
+"exposed_type": "pandas",
+"is_generated": false
+}
+}
