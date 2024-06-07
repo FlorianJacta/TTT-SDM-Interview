@@ -1,0 +1,10 @@
+src_complete/.taipy
+src_complete/user_data
+
+src_data_integration/.taipy
+src_data_integration/user_data
+
+src_task_orchestration/.taipy
+src_task_orchestration/user_data
+
+*.pyc

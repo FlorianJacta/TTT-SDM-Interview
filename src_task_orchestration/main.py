@@ -12,14 +12,12 @@ from configuration.configuration import scenario_cfg
 
 from taipy import Core, Gui
 import taipy.gui.builder as tgb
+import taipy as tp
 
-scenario = None
 data_node = None
 
 with tgb.Page() as page:
-    with tgb.layout("20 80"):
-        tgb.scenario_selector("{scenario}")
-        tgb.scenario("{scenario}")
+    tgb.scenario("{scenario}")
 
     tgb.job_selector()
 
@@ -33,6 +31,8 @@ with tgb.Page() as page:
 if __name__ == "__main__":
     core = Core()
     core.run()
+
+    scenario = tp.create_scenario(scenario_cfg)
 
     gui = Gui(page=page)
     gui.run(title="Sales Prediction", port=1221)
