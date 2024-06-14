@@ -8,6 +8,10 @@ import datetime as dt
 import numpy as np
 
 # This code is used for configuration.py
+fixed_variables = pd.DataFrame(
+    {"Max_Capacity_FPA": [15000], "cost_FPA_Back_Order": [200], "cost_FPA_Stock": [45], "Initial_Back_Order_FPA": [0], "Initial_Stock_FPA": [5000], "Initial_Production_FPA": [3000], "number_RPone_to_produce_FPA": [20], "number_RPtwo_to_produce_FPA": [15], "Max_Capacity_FPB": [7000], "cost_FPB_Back_Order": [250], "cost_FPB_Stock": [40], "Initial_Back_Order_FPB": [0], "Initial_Stock_FPB": [10000], "Initial_Production_FPB": [5000], "number_RPone_to_produce_FPB": [50], "number_RPtwo_to_produce_FPB": [45], "Initial_Stock_RPone": [10000], "Max_Stock_RPone": [100000], "cost_RPone_Stock": [30], "cost_RPone_Purchase": [100], "Initial_Purchase_RPone": [10000], "Initial_Stock_RPtwo": [10000], "Max_Stock_RPtwo": [100000], "cost_RPtwo_Stock": [60], "cost_RPtwo_Purchase": [150], "Initial_Purchase_RPtwo": [10000], "Weight_of_Stock": [100], "Weight_of_Back_Order": [100], "Max_Capacity_of_FPA_and_FPB": [100000]}
+)
+
 
 ###############################################################################
 # Functions
@@ -69,24 +73,31 @@ def convert_to_demand(date, predictions_xgboost):
 
     demand = pd.DataFrame({
         "Date": dates,
-        "Demand_Electronic_accessories": predictions_xgboost["Predictions Electronic accessories"]*1.2,
-        "Demand_Fashion_accessories": predictions_xgboost["Predictions Fashion accessories"]*0.7
+        "Demand_Electronic_accessories": (predictions_xgboost["Predictions Electronic accessories"]*1.2).astype(int),
+        "Demand_Fashion_accessories": (predictions_xgboost["Predictions Fashion accessories"]*0.7).astype(int)
     })
     demand = add_features(demand)
     return demand
 
 
-def create_model(demand: pd.DataFrame, fixed_variables: pd.DataFrame):
+def create_model(demand: pd.DataFrame, model_variables: pd.DataFrame):
     """This function creates the model. It will creates all the variables and contraints of the problem.
     It will also create the objective function.
 
     Args:
         demand (pd.DataFrame): demand dataframe
-        fixed_variables (pd.DataFrame): fixed variables DataFrame
+        model_variables (pd.DataFrame): model variables DataFrame
 
     Returns:
         dict: model_info (with the model created)
     """
+    global fixed_variables
+
+    fixed_variables["Max_Capacity_FPA"] = model_variables["Max_Capacity_FPA"]
+    fixed_variables["Max_Capacity_FPB"] = model_variables["Max_Capacity_FPB"]
+    fixed_variables["Weight_of_Stock"] = model_variables["Weight_of_Stock"]
+    fixed_variables["Weight_of_Back_Order"] = model_variables["Weight_of_Back_Order"]
+
     print("Creating the model...")
 
     monthly_demand_FPA = demand["Demand_Electronic_accessories"]
@@ -396,12 +407,13 @@ def solve_model(model_info: dict, solver_name):
         "Monthly_Purchase_RPone": purchase_RPone_sol,
         "Monthly_Stock_RPtwo": stock_RPtwo_sol,
         "Monthly_Purchase_RPtwo": purchase_RPtwo_sol,
+        "variables": fixed_variables
     }
     print("Model solved")
     return model_info
 
 
-def create_results(model_info: dict, fixed_variables: pd.DataFrame, demand: pd.DataFrame):
+def create_results(model_info: dict, demand: pd.DataFrame):
     """This function creates the results of the model. The results dataframe is a concatenation of all the useful information.
 
     Args:
@@ -412,7 +424,10 @@ def create_results(model_info: dict, fixed_variables: pd.DataFrame, demand: pd.D
     Returns:
         pd.DataFrame: dataframe that gathers all the useful information about the solution
     """
+    fixed_variables = model_info["variables"]
+    
     print("Creating the results...")
+
 
     # getting the demand for A and B
     demand_series_FPA = demand["Demand_Electronic_accessories"]

@@ -29,7 +29,7 @@ storage_type = "csv"
 scope = "GLOBAL:SCOPE"
 default_path = "data/demand.csv"
 
-[DATA_NODE.fixed_variables]
+[DATA_NODE.model_variables]
 storage_type = "csv"
 
 [DATA_NODE.solver_name]
@@ -67,7 +67,7 @@ skippable = "True:bool"
 
 [TASK.create_model]
 function = "algos.algos.create_model:function"
-inputs = [ "demand:SECTION", "fixed_variables:SECTION",]
+inputs = [ "demand:SECTION", "model_variables:SECTION",]
 outputs = [ "model_created:SECTION",]
 skippable = "True:bool"
 
@@ -79,7 +79,7 @@ skippable = "True:bool"
 
 [TASK.create_results]
 function = "algos.algos.create_results:function"
-inputs = [ "model_solved:SECTION", "fixed_variables:SECTION", "demand:SECTION",]
+inputs = [ "model_solved:SECTION", "demand:SECTION",]
 outputs = [ "results:SECTION",]
 skippable = "True:bool"
 
@@ -88,36 +88,11 @@ tasks = [ "task_preprocess_data:SECTION", "task_train:SECTION", "task_forecast:S
 additional_data_nodes = []
 frequency = "MONTHLY:FREQUENCY"
 
-[DATA_NODE.fixed_variables.default_data]
+[DATA_NODE.model_variables.default_data]
 Max_Capacity_FPA = [ "15000:int",]
-cost_FPA_Back_Order = [ "200:int",]
-cost_FPA_Stock = [ "45:int",]
-Initial_Back_Order_FPA = [ "0:int",]
-Initial_Stock_FPA = [ "5000:int",]
-Initial_Production_FPA = [ "3000:int",]
-number_RPone_to_produce_FPA = [ "20:int",]
-number_RPtwo_to_produce_FPA = [ "15:int",]
 Max_Capacity_FPB = [ "7000:int",]
-cost_FPB_Back_Order = [ "250:int",]
-cost_FPB_Stock = [ "40:int",]
-Initial_Back_Order_FPB = [ "0:int",]
-Initial_Stock_FPB = [ "10000:int",]
-Initial_Production_FPB = [ "5000:int",]
-number_RPone_to_produce_FPB = [ "50:int",]
-number_RPtwo_to_produce_FPB = [ "45:int",]
-Initial_Stock_RPone = [ "10000:int",]
-Max_Stock_RPone = [ "100000:int",]
-cost_RPone_Stock = [ "30:int",]
-cost_RPone_Purchase = [ "100:int",]
-Initial_Purchase_RPone = [ "10000:int",]
-Initial_Stock_RPtwo = [ "10000:int",]
-Max_Stock_RPtwo = [ "100000:int",]
-cost_RPtwo_Stock = [ "60:int",]
-cost_RPtwo_Purchase = [ "150:int",]
-Initial_Purchase_RPtwo = [ "10000:int",]
 Weight_of_Stock = [ "100:int",]
 Weight_of_Back_Order = [ "100:int",]
-Max_Capacity_of_FPA_and_FPB = [ "100000:int",]
 
 [SCENARIO.merged_scenario.comparators]
 

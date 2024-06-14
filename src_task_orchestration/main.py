@@ -19,13 +19,14 @@ data_node = None
 with tgb.Page() as page:
     tgb.scenario("{scenario}")
 
+    tgb.scenario_dag("{scenario}")
+
     tgb.job_selector()
 
     with tgb.layout("20 80"):
         tgb.data_node_selector("{data_node}")
         tgb.data_node("{data_node}")
     
-    tgb.scenario_dag("{scenario}")
 
 
 if __name__ == "__main__":
@@ -35,5 +36,5 @@ if __name__ == "__main__":
     scenario = tp.create_scenario(scenario_cfg)
 
     gui = Gui(page=page)
-    gui.run(title="Sales Prediction", port=1221)
+    gui.run(title="Sales Prediction", port=1220)
     

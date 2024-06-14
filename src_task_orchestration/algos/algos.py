@@ -8,12 +8,14 @@ import datetime as dt
 import numpy as np
 
 # This code is used for configuration.py
+fixed_variables = pd.DataFrame(
+    {"Max_Capacity_FPA": [15000], "cost_FPA_Back_Order": [200], "cost_FPA_Stock": [45], "Initial_Back_Order_FPA": [0], "Initial_Stock_FPA": [5000], "Initial_Production_FPA": [3000], "number_RPone_to_produce_FPA": [20], "number_RPtwo_to_produce_FPA": [15], "Max_Capacity_FPB": [7000], "cost_FPB_Back_Order": [250], "cost_FPB_Stock": [40], "Initial_Back_Order_FPB": [0], "Initial_Stock_FPB": [10000], "Initial_Production_FPB": [5000], "number_RPone_to_produce_FPB": [50], "number_RPtwo_to_produce_FPB": [45], "Initial_Stock_RPone": [10000], "Max_Stock_RPone": [100000], "cost_RPone_Stock": [30], "cost_RPone_Purchase": [100], "Initial_Purchase_RPone": [10000], "Initial_Stock_RPtwo": [10000], "Max_Stock_RPtwo": [100000], "cost_RPtwo_Stock": [60], "cost_RPtwo_Purchase": [150], "Initial_Purchase_RPtwo": [10000], "Weight_of_Stock": [100], "Weight_of_Back_Order": [100], "Max_Capacity_of_FPA_and_FPB": [100000]}
+)
+
 
 ###############################################################################
 # Functions
 ###############################################################################
-
-
 def add_features(data):
     dates = pd.to_datetime(data["Date"])
 
@@ -71,8 +73,8 @@ def convert_to_demand(date, predictions_xgboost):
 
     demand = pd.DataFrame({
         "Date": dates,
-        "Demand_Electronic_accessories": predictions_xgboost["Predictions Electronic accessories"]*1.2,
-        "Demand_Fashion_accessories": predictions_xgboost["Predictions Fashion accessories"]*0.7
+        "Demand_Electronic_accessories": (predictions_xgboost["Predictions Electronic accessories"]*1.2).astype(int),
+        "Demand_Fashion_accessories": (predictions_xgboost["Predictions Fashion accessories"]*0.7).astype(int)
     })
     demand = add_features(demand)
     return demand

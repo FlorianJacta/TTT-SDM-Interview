@@ -21,5 +21,5 @@ if __name__ == "__main__":
     tp.create_global_data_node(demand_cfg)
 
     gui = Gui(page=page)
-    gui.run(title="Sales Prediction", port=1221)
+    gui.run(title="Sales Prediction", port=1219)
     

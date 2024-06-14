@@ -41,10 +41,10 @@ predictions_xgboost_cfg = Config.configure_data_node(id="predictions_xgboost", s
 demand_cfg = Config.configure_csv_data_node(id="demand", scope=Scope.GLOBAL, default_path="data/demand.csv")
 
 
-with open('data/fixed_variables_default.json') as f:
-    fixed_variables_default = json.load(f)
+with open('data/model_variables_default.json') as f:
+    model_variables_default = json.load(f)
 
-fixed_variables_cfg = Config.configure_csv_data_node(id="fixed_variables", default_data=fixed_variables_default)
+model_variables_cfg = Config.configure_csv_data_node(id="model_variables", default_data=model_variables_default)
 solver_name_cfg = Config.configure_data_node(id="solver_name", default_data="Default")
 model_created_cfg = Config.configure_data_node(id="model_created")
 model_solved_cfg = Config.configure_data_node(id="model_solved")
@@ -81,7 +81,7 @@ task_convert_to_demand_cfg = Config.configure_task(id="task_convert_to_demand",
                                         skippable=True)
 
 create_model_task = Config.configure_task(id="create_model",
-                                          input=[demand_cfg, fixed_variables_cfg],
+                                          input=[demand_cfg, model_variables_cfg],
                                           function=create_model,
                                           output=[model_created_cfg],
                                           skippable=True)
@@ -93,7 +93,7 @@ solve_model_cfg = Config.configure_task(id="solve_model",
                                         skippable=True)
 
 create_results_cfg = Config.configure_task(id="create_results",
-                                           input=[model_solved_cfg, fixed_variables_cfg, demand_cfg],
+                                           input=[model_solved_cfg, demand_cfg],
                                            function=create_results,
                                            output=[results_cfg],
                                            skippable=True)
